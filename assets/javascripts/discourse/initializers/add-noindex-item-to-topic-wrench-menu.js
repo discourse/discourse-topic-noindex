@@ -1,4 +1,7 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
+import Topic from "discourse/models/topic";
+//import { ajax } from "../../../../../../app/assets/javascripts/discourse/app/lib/ajax";
+import { ajax } from "discourse/lib/ajax";
 
 const PLUGIN_ID = "discourse-topic-noindex";
 
@@ -12,22 +15,34 @@ export default {
 };
 
 function initialize(api) {
-  api.decorateWidget("topic-admin-menu:adminMenuButtons", (helper) => {
-    const topic = helper.attrs.topic;
-    const { canManageTopic } = helper.widget.currentUser || {};
-    if (!topic.isPrivateMessage && canManageTopic) {
+  let helper = null;
+
+  api.attachWidgetAction("topic-admin-menu:adminMenuButtons", "toggleNoIndex", () => {
+    const topic = helper?.attrs?.topic;
+    if (!topic) {
+      return;
+    }
+    ajax(`/t/${topic.id}/toggle-noindex`, {
+      type: "PUT",
+    }).then(() => {
+      topic.reload();
+    });
+  });
+
+  api.decorateWidget("topic-admin-menu:adminMenuButtons", (_helper) => {
+    helper = _helper
+    const noindex = helper?.attrs?.topic?.noindex
+    if (!topic.isPrivateMessage && helper.widget.currentUser.staff) {
       return {
         buttonClass: "btn-default",
         action: "toggleNoIndex",
-        icon: "shield-alt",
-        label: "actions.noindex",
+        icon: noindex ? "far-eye" : "far-eye-slash",
+        label: noindex ? "actions.noindex_stop" : "actions.noindex",
+        topicId: helper?.attrs?.topic?.id
       };
     }
   });
 
-    api.attachWidgetAction("topic-admin-menu:adminMenuButtons", "toggleNoIndex", ()=>{
-      console.log("toggle no index")
-    });
 
 }
 
