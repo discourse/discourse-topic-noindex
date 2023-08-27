@@ -23,15 +23,15 @@ function initialize(api) {
       return;
     }
     ajax(`/t/${topic.id}/toggle-noindex`, {
-      type: "PUT",
+      type: "PUT"
     }).then(() => {
       topic.reload();
     });
   });
 
   api.decorateWidget("topic-admin-menu:adminMenuButtons", (_helper) => {
-    helper = _helper
-    const noindex = helper?.attrs?.topic?.noindex
+    helper = _helper;
+    const noindex = helper?.attrs?.topic?.noindex;
     if (!topic.isPrivateMessage && helper.widget.currentUser.staff) {
       return {
         buttonClass: "btn-default",
