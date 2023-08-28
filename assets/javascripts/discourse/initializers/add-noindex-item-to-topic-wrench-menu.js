@@ -32,7 +32,8 @@ function initialize(api) {
   api.decorateWidget("topic-admin-menu:adminMenuButtons", (_helper) => {
     helper = _helper;
     const noindex = helper?.attrs?.topic?.noindex;
-    if (!topic.isPrivateMessage && helper.widget.currentUser.staff) {
+    console.log({currentUser:helper?.widget?.currentUser})
+    if (!topic.isPrivateMessage && helper?.widget?.currentUser?.canManageTopic) {
       return {
         buttonClass: "btn-default",
         action: "toggleNoIndex",

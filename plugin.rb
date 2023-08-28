@@ -16,7 +16,6 @@ end
 require_relative "lib/my_plugin_module/engine"
 
 after_initialize do
-  # Code which should run after Rails has finished booting
   reloadable_patch do
     module ::TopicControllerNoIndexExtension
 
@@ -30,7 +29,7 @@ after_initialize do
       def toggle_noindex
         topic_id = params.require(:topic_id).to_i
 
-        guardian.ensure_can_change_topic_noindex!
+        #guardian.ensure_can_change_topic_noindex!
         begin
           topic = Topic.find(topic_id)
           current = topic.custom_fields["noindex"]
@@ -67,18 +66,6 @@ after_initialize do
     add_to_serializer(:topic_view, :noindex) do
       object.topic.noindex
     end
-
-#
-#     require_dependency 'topic_view_serializer'
-#     class ::TopicViewSerializer
-#       def self.attributes_from_topic(*list)
-#         super(list)
-#         attributes(:noindex)
-#         class_eval %{def noindex
-#           object.topic.noindex
-#         end}
-#       end
-#     end
 
     require_dependency 'topic_guardian'
     module ::TopicGuardian
