@@ -18,12 +18,11 @@ require_relative "lib/my_plugin_module/engine"
 after_initialize do
   reloadable_patch do
     module ::TopicControllerNoIndexExtension
-
       Discourse::Application.routes.prepend do
         put "t/:topic_id/toggle-noindex" => "topics#toggle_noindex",
-          :constraints => {
-            topic_id: /\d+/,
-          }
+            :constraints => {
+              topic_id: /\d+/,
+            }
       end
 
       def toggle_noindex
@@ -33,12 +32,12 @@ after_initialize do
           topic = Topic.find(topic_id)
           current = topic.custom_fields["noindex"]
           newval = nil
-          if current.nil? or current=='f'
+          if current.nil? or current == "f"
             newval = "t"
           else
             newval = "f"
           end
-          topic.custom_fields["noindex"]=newval
+          topic.custom_fields["noindex"] = newval
           topic.save!
 
           render json: success_json
@@ -55,18 +54,16 @@ after_initialize do
 
     ::TopicsController.prepend ::TopicControllerNoIndexExtension
 
-    require_dependency 'topic'
+    require_dependency "topic"
     class ::Topic
       def noindex
-        custom_fields["noindex"]=="t"
+        custom_fields["noindex"] == "t"
       end
     end
 
-    add_to_serializer(:topic_view, :noindex) do
-      object.topic.noindex
-    end
+    add_to_serializer(:topic_view, :noindex) { object.topic.noindex }
 
-    require_dependency 'topic_guardian'
+    require_dependency "topic_guardian"
     module ::TopicGuardian
       def can_change_topic_noindex?
         is_staff?
@@ -74,5 +71,3 @@ after_initialize do
     end
   end
 end
-
-
