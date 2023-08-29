@@ -1,6 +1,4 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
-import Topic from "discourse/models/topic";
-//import { ajax } from "../../../../../../app/assets/javascripts/discourse/app/lib/ajax";
 import { ajax } from "discourse/lib/ajax";
 
 const PLUGIN_ID = "discourse-topic-noindex";
@@ -32,8 +30,7 @@ function initialize(api) {
   api.decorateWidget("topic-admin-menu:adminMenuButtons", (_helper) => {
     helper = _helper;
     const noindex = helper?.attrs?.topic?.noindex;
-    console.log({currentUser:helper?.widget?.currentUser})
-    if (!topic.isPrivateMessage && helper?.widget?.currentUser?.canManageTopic) {
+    if (!helper?.attrs?.topic?.isPrivateMessage && helper?.widget?.currentUser?.canManageTopic) {
       return {
         buttonClass: "btn-default",
         action: "toggleNoIndex",

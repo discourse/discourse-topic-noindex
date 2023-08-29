@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 # name: discourse-topic-noindex
-# about: TODO
+# about: let admins remove individual topics from search engines by a
 # version: 0.0.1
 # authors: chrism
-# url: TODO
+# url: http://www.github.com/discourse/topic-noindex
 # required_version: 2.7.0
 
 enabled_site_setting :plugin_name_enabled
@@ -27,9 +27,8 @@ after_initialize do
       end
 
       def toggle_noindex
+        head :forbidden and return unless guardian.is_staff?
         topic_id = params.require(:topic_id).to_i
-
-        #guardian.ensure_can_change_topic_noindex!
         begin
           topic = Topic.find(topic_id)
           current = topic.custom_fields["noindex"]
