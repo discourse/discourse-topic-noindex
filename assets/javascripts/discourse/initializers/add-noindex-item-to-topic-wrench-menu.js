@@ -1,6 +1,7 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { ajax } from "discourse/lib/ajax";
 
+// eslint-disable-next-line no-unused-vars
 const PLUGIN_ID = "discourse-topic-noindex";
 
 export default {

@@ -32,7 +32,7 @@ after_initialize do
           topic = Topic.find(topic_id)
           current = topic.custom_fields["noindex"]
           newval = nil
-          if current.nil? or current == "f"
+          if current.nil? || current == "f"
             newval = "t"
           else
             newval = "f"
