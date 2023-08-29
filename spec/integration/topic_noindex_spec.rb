@@ -23,7 +23,7 @@ describe "topic-`noindex plugin" do
       get "/t/#{topic.slug}/#{topic.id}"
       expect(response.headers["X-Robots-Tag"]).to be_nil
 
-      topic.custom_fields["noindex"]="t"
+      topic.custom_fields["noindex"] = "t"
       topic.save
       get "/t/#{topic.slug}/#{topic.id}"
       expect(response.headers["X-Robots-Tag"]).to eq("noindex")
