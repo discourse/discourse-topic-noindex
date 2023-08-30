@@ -5,7 +5,7 @@ import { ajax } from "discourse/lib/ajax";
 const PLUGIN_ID = "discourse-topic-noindex";
 
 export default {
-  name: "prevent-search-indexing",
+  name: "discourse-topic-noindex",
 
   initialize() {
     withPluginApi("0.8.31", initialize);

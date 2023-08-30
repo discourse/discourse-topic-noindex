@@ -1,4 +1,4 @@
 plugins:
-  plugin_name_enabled:
-    default: false
+  discourse_topic_noindex_enabled:
+    default: true
     client: true

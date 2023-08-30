@@ -1,43 +1,39 @@
 # frozen_string_literal: true
 
 # name: discourse-topic-noindex
-# about: let admins remove individual topics from search engines by a
+# about: let admins remove individual topics from search engines via x-robots-tag=noindex http header
 # version: 0.0.1
 # authors: chrism
 # url: http://www.github.com/discourse/topic-noindex
 # required_version: 2.7.0
 
-enabled_site_setting :plugin_name_enabled
+enabled_site_setting :discourse_topic_noindex_enabled
 
-module ::MyPluginModule
-  PLUGIN_NAME = "discourse-plugin-name"
+module ::DiscourseTopicNoindex
+  PLUGIN_NAME = "discourse-topic-noindex"
 end
 
-require_relative "lib/my_plugin_module/engine"
+require_relative "lib/discourse_topic_noindex/engine"
 
 after_initialize do
   reloadable_patch do
-    module ::TopicControllerNoIndexExtension
-      Discourse::Application.routes.prepend do
-        put "t/:topic_id/toggle-noindex" => "topics#toggle_noindex",
-            :constraints => {
-              topic_id: /\d+/,
-            }
-      end
+    Discourse::Application.routes.prepend do
+      put "t/:topic_id/toggle-noindex" => "topics#toggle_noindex",
+          :constraints => {
+            topic_id: /\d+/,
+          }
+    end
 
+    Topic.register_custom_field_type "noindex", :boolean
+
+    module ::TopicControllerNoIndexExtension
       def toggle_noindex
+        head :forbidden and return unless SiteSetting.discourse_topic_noindex_enabled
         head :forbidden and return unless guardian.is_staff?
         topic_id = params.require(:topic_id).to_i
         begin
           topic = Topic.find(topic_id)
-          current = topic.custom_fields["noindex"]
-          newval = nil
-          if current.nil? || current == "f"
-            newval = "t"
-          else
-            newval = "f"
-          end
-          topic.custom_fields["noindex"] = newval
+          topic.custom_fields["noindex"] = !topic.custom_fields["noindex"]
           topic.save!
 
           render json: success_json
@@ -54,20 +50,10 @@ after_initialize do
 
     ::TopicsController.prepend ::TopicControllerNoIndexExtension
 
-    require_dependency "topic"
-    class ::Topic
-      def noindex
-        custom_fields["noindex"] == "t"
-      end
+    add_to_class(:topic, :noindex) do
+      custom_fields["noindex"]
     end
 
     add_to_serializer(:topic_view, :noindex) { object.topic.noindex }
-
-    require_dependency "topic_guardian"
-    module ::TopicGuardian
-      def can_change_topic_noindex?
-        is_staff?
-      end
-    end
   end
 end
