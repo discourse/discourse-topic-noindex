@@ -10,7 +10,7 @@
 enabled_site_setting :plugin_name_enabled
 
 module ::MyPluginModule
-  PLUGIN_NAME = "discourse-topic-noindex"
+  PLUGIN_NAME = "discourse-plugin-name"
 end
 
 require_relative "lib/my_plugin_module/engine"
