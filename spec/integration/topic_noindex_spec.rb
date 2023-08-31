@@ -46,6 +46,4 @@ describe "discourse-topic-noindex plugin" do
       expect(topic.noindex).to eq(true)
     end
   end
-
-
 end

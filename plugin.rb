@@ -50,9 +50,7 @@ after_initialize do
 
     ::TopicsController.prepend ::TopicControllerNoIndexExtension
 
-    add_to_class(:topic, :noindex) do
-      custom_fields["noindex"]
-    end
+    add_to_class(:topic, :noindex) { custom_fields["noindex"] }
 
     add_to_serializer(:topic_view, :noindex) { object.topic.noindex }
   end
