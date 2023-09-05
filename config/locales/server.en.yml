@@ -1,1 +1,3 @@
 en:
+  site_settings:
+    discourse_topic_noindex_enabled: "Enable Topic No-Index"

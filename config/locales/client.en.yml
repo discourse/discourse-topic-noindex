@@ -1,4 +1,8 @@
 en:
   js:
+    topic:
+      actions:
+        noindex: "Hide Topic From Search Engines"
+        noindex_stop: "Stop Hiding Topic From Search Engines"
     discourse_plugin_name:
       placeholder: placeholder

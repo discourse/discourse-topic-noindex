@@ -1,20 +1,57 @@
 # frozen_string_literal: true
 
-# name: discourse-plugin-name
-# about: TODO
+# name: discourse-topic-noindex
+# about: let admins remove individual topics from search engines via x-robots-tag=noindex http header
 # version: 0.0.1
-# authors: Discourse
-# url: TODO
+# authors: chrism
+# url: http://www.github.com/discourse/topic-noindex
 # required_version: 2.7.0
 
-enabled_site_setting :plugin_name_enabled
+enabled_site_setting :discourse_topic_noindex_enabled
 
-module ::MyPluginModule
-  PLUGIN_NAME = "discourse-plugin-name"
+module ::DiscourseTopicNoindex
+  PLUGIN_NAME = "discourse-topic-noindex"
 end
 
-require_relative "lib/my_plugin_module/engine"
+require_relative "lib/discourse_topic_noindex/engine"
 
 after_initialize do
-  # Code which should run after Rails has finished booting
+  reloadable_patch do
+    Discourse::Application.routes.prepend do
+      put "t/:topic_id/toggle-noindex" => "topics#toggle_noindex",
+          :constraints => {
+            topic_id: /\d+/,
+          }
+    end
+
+    Topic.register_custom_field_type "noindex", :boolean
+
+    module ::TopicControllerNoIndexExtension
+      def toggle_noindex
+        head :forbidden and return unless SiteSetting.discourse_topic_noindex_enabled
+        head :forbidden and return unless guardian.is_staff?
+        topic_id = params.require(:topic_id).to_i
+        begin
+          topic = Topic.find(topic_id)
+          topic.custom_fields["noindex"] = !topic.custom_fields["noindex"]
+          topic.save!
+
+          render json: success_json
+        rescue ActiveRecord::RecordInvalid
+          render json: failed_json, status: 422
+        end
+      end
+
+      def show
+        super
+        response.headers["X-Robots-Tag"] = "noindex" if @topic_view.topic.noindex
+      end
+    end
+
+    ::TopicsController.prepend ::TopicControllerNoIndexExtension
+
+    add_to_class(:topic, :noindex) { custom_fields["noindex"] }
+
+    add_to_serializer(:topic_view, :noindex) { object.topic.noindex }
+  end
 end

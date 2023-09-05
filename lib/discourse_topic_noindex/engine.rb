@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module ::MyPluginModule
+module DiscourseTopicNoindex
   class Engine < ::Rails::Engine
-    engine_name PLUGIN_NAME
-    isolate_namespace MyPluginModule
+    engine_name "discourse-topic-noindex"
+    isolate_namespace DiscourseTopicNoindex
     config.autoload_paths << File.join(config.root, "lib")
   end
 end
