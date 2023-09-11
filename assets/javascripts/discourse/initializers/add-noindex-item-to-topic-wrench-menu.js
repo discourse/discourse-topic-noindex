@@ -39,7 +39,7 @@ function initialize(api) {
       helper?.widget?.currentUser?.canManageTopic
     ) {
       return {
-        buttonClass: "btn-default",
+        buttonClass: "popup-menu-button",
         action: "toggleNoIndex",
         icon: noindex ? "far-eye" : "far-eye-slash",
         label: noindex ? "actions.noindex_stop" : "actions.noindex",
