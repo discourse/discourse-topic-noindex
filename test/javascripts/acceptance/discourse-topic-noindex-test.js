@@ -1,13 +1,13 @@
+import { click, visit } from "@ember/test-helpers";
+import { test } from "qunit";
 import {
   acceptance,
   exists,
   query,
 } from "discourse/tests/helpers/qunit-helpers";
-import { click, visit } from "@ember/test-helpers";
-import { test } from "qunit";
 import { cloneJSON } from "discourse-common/lib/object";
-import topicFixtures from "../fixtures/topic-fixtures";
 import I18n from "I18n";
+import topicFixtures from "../fixtures/topic-fixtures";
 
 acceptance("Topic No-index", function (needs) {
   needs.user();
