@@ -1,5 +1,5 @@
-import { withPluginApi } from "discourse/lib/plugin-api";
 import { ajax } from "discourse/lib/ajax";
+import { withPluginApi } from "discourse/lib/plugin-api";
 
 // eslint-disable-next-line no-unused-vars
 const PLUGIN_ID = "discourse-topic-noindex";
