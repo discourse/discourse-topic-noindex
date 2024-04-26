@@ -13,61 +13,22 @@ export default {
 };
 
 function initialize(api) {
-  if (api.addTopicAdminMenuButton) {
-    api.addTopicAdminMenuButton((topic) => {
-      const canManageTopic = api.getCurrentUser()?.canManageTopic;
-      const noindex = topic.get("noindex");
+  api.addTopicAdminMenuButton((topic) => {
+    const canManageTopic = api.getCurrentUser()?.canManageTopic;
+    const noindex = topic.get("noindex");
 
-      if (!topic.isPrivateMessage && canManageTopic) {
-        return {
-          icon: noindex ? "far-eye" : "far-eye-slash",
-          label: noindex
-            ? "topic.actions.noindex_stop"
-            : "topic.actions.noindex",
-          action: () => {
-            ajax(`/t/${topic.id}/toggle-noindex`, {
-              type: "PUT",
-            }).then(() => {
-              topic.reload();
-            });
-          },
-        };
-      }
-    });
-  } else {
-    let helper = null;
-
-    api.attachWidgetAction(
-      "topic-admin-menu:adminMenuButtons",
-      "toggleNoIndex",
-      () => {
-        const topic = helper?.attrs?.topic;
-        if (!topic) {
-          return;
-        }
-        ajax(`/t/${topic.id}/toggle-noindex`, {
-          type: "PUT",
-        }).then(() => {
-          topic.reload();
-        });
-      }
-    );
-
-    api.decorateWidget("topic-admin-menu:adminMenuButtons", (_helper) => {
-      helper = _helper;
-      const noindex = helper?.attrs?.topic?.noindex;
-      if (
-        !helper?.attrs?.topic?.isPrivateMessage &&
-        helper?.widget?.currentUser?.canManageTopic
-      ) {
-        return {
-          buttonClass: "popup-menu-button",
-          action: "toggleNoIndex",
-          icon: noindex ? "far-eye" : "far-eye-slash",
-          label: noindex ? "actions.noindex_stop" : "actions.noindex",
-          topicId: helper?.attrs?.topic?.id,
-        };
-      }
-    });
-  }
+    if (!topic.isPrivateMessage && canManageTopic) {
+      return {
+        icon: noindex ? "far-eye" : "far-eye-slash",
+        label: noindex ? "topic.actions.noindex_stop" : "topic.actions.noindex",
+        action: () => {
+          ajax(`/t/${topic.id}/toggle-noindex`, {
+            type: "PUT",
+          }).then(() => {
+            topic.reload();
+          });
+        },
+      };
+    }
+  });
 }
