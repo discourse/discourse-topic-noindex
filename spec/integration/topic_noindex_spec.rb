@@ -10,13 +10,14 @@ require "rails_helper"
 
 describe "discourse-topic-noindex plugin" do
   fab!(:topic) { Fabricate(:topic) }
-
   fab!(:user) { Fabricate(:user) }
   fab!(:admin) { Fabricate(:admin) }
 
   describe "with regular user" do
-    before { SiteSetting.discourse_topic_noindex_enabled = true }
-    before { sign_in(user) }
+    before do
+      SiteSetting.discourse_topic_noindex_enabled = true
+      sign_in(user)
+    end
 
     it "should fail to call /toggle-noindex" do
       put "/t/#{topic.id}/toggle-noindex.json"
@@ -28,19 +29,22 @@ describe "discourse-topic-noindex plugin" do
       expect(response.headers["X-Robots-Tag"]).to be_nil
 
       topic.custom_fields["noindex"] = true
-      topic.save
+      topic.save!
       get "/t/#{topic.slug}/#{topic.id}"
       expect(response.headers["X-Robots-Tag"]).to eq("noindex")
     end
   end
 
   describe "with admin user" do
-    before { SiteSetting.discourse_topic_noindex_enabled = true }
-    before { sign_in(admin) }
+    before do
+      SiteSetting.discourse_topic_noindex_enabled = true
+      sign_in(admin)
+    end
+
     it "should toggle topic noindex" do
       get "/t/#{topic.slug}/#{topic.id}.json"
-      json = JSON.parse(response.body)
-      expect(json["noindex"]).to be_nil
+      expect(response.parsed_body["noindex"]).to be_nil
+
       put "/t/#{topic.id}/toggle-noindex.json"
       topic.reload
       expect(topic.noindex).to eq(true)
