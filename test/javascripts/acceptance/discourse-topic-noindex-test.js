@@ -1,12 +1,8 @@
 import { click, visit } from "@ember/test-helpers";
 import { test } from "qunit";
-import {
-  acceptance,
-  exists,
-  query,
-} from "discourse/tests/helpers/qunit-helpers";
+import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import { cloneJSON } from "discourse-common/lib/object";
-import I18n from "I18n";
+import I18n from "discourse-i18n";
 import topicFixtures from "../fixtures/topic-fixtures";
 
 acceptance("Topic No-index", function (needs) {
@@ -15,7 +11,7 @@ acceptance("Topic No-index", function (needs) {
     server.get("/t/719.json", () => {
       return helper.response(cloneJSON(topicFixtures["/t/719.json"]));
     });
-    server.get("/t/719-noindex.json", () => {
+    server.get("/t/720.json", () => {
       const json = cloneJSON(topicFixtures["/t/719.json"]);
       json.noindex = true;
       return helper.response(json);
@@ -24,21 +20,21 @@ acceptance("Topic No-index", function (needs) {
 
   test("'hide from search engines' button appears", async function (assert) {
     await visit("/t/-/719");
-    assert.ok(exists(".d-icon-wrench"), "it shows the topic wrench button");
+    assert.dom(".d-icon-wrench").exists("it shows the topic wrench button");
+
     await click(".topic-admin-menu-button button");
-    assert.strictEqual(
-      query("ul .topic-admin-menu-undefined li:nth-child(2)").innerText.trim(),
-      I18n.t("js.topic.actions.noindex")
-    );
+    assert
+      .dom(".topic-admin-menu-content .toggle-noindex")
+      .hasText(I18n.t("js.topic.actions.noindex"));
   });
 
   test("'stop hiding from search engines' button appears", async function (assert) {
-    await visit("/t/-/719-noindex");
-    assert.ok(exists(".d-icon-wrench"), "it shows the topic wrench button");
+    await visit("/t/-/720");
+    assert.dom(".d-icon-wrench").exists("it shows the topic wrench button");
+
     await click(".topic-admin-menu-button button");
-    assert.strictEqual(
-      query("ul .topic-admin-menu-undefined li:nth-child(2)").innerText.trim(),
-      I18n.t("js.topic.actions.noindex_stop")
-    );
+    assert
+      .dom(".topic-admin-menu-content .toggle-noindex")
+      .hasText(I18n.t("js.topic.actions.noindex_stop"));
   });
 });
