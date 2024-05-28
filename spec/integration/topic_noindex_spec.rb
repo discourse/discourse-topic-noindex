@@ -9,9 +9,9 @@ require "rails_helper"
 # 3. validate that topic's noindex is true now
 
 describe "discourse-topic-noindex plugin" do
-  fab!(:topic) { Fabricate(:topic) }
-  fab!(:user) { Fabricate(:user) }
-  fab!(:admin) { Fabricate(:admin) }
+  fab!(:topic)
+  fab!(:user)
+  fab!(:admin)
 
   describe "with regular user" do
     before do
