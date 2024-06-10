@@ -53,12 +53,13 @@ describe "discourse-topic-noindex plugin" do
 
     it "should get a topic by their slug and return noindex header" do
       get "/t/#{topic.slug}"
-      expect(response.headers["X-Robots-Tag"]).to be_nil
+      expect(topic.noindex).to eq(nil)
 
       put "/t/#{topic.id}/toggle-noindex.json"
 
       get "/t/#{topic.slug}"
-      expect(response.headers["X-Robots-Tag"]).to eq("noindex")
+      topic.reload
+      expect(topic.noindex).to eq(true)
     end
   end
 end
