@@ -44,11 +44,12 @@ after_initialize do
 
       def show
         super
-        topic = if @topic_view.nil? && params[:id]
-          Topic.find_by_slug(params[:id])
-        else
-          @topic_view.topic
-        end
+        topic =
+          if @topic_view.nil? && params[:id]
+            Topic.find_by_slug(params[:id])
+          else
+            @topic_view.topic
+          end
         return unless topic
         response.headers["X-Robots-Tag"] = "noindex" if topic.noindex
       end
