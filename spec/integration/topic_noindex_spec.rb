@@ -7,6 +7,7 @@ require "rails_helper"
 # 2. with admin user, request /t/-/<topic-id>, validate that noindex is false
 # ( call PUT toggle_no_index/<topic-id> )
 # 3. validate that topic's noindex is true now
+# 4. validate that getting a topic with their slug returns noindex header
 
 describe "discourse-topic-noindex plugin" do
   fab!(:topic)
@@ -46,6 +47,17 @@ describe "discourse-topic-noindex plugin" do
       expect(response.parsed_body["noindex"]).to be_nil
 
       put "/t/#{topic.id}/toggle-noindex.json"
+      topic.reload
+      expect(topic.noindex).to eq(true)
+    end
+
+    it "should get a topic by their slug and return noindex header" do
+      get "/t/#{topic.slug}"
+      expect(topic.noindex).to eq(nil)
+
+      put "/t/#{topic.id}/toggle-noindex.json"
+
+      get "/t/#{topic.slug}"
       topic.reload
       expect(topic.noindex).to eq(true)
     end

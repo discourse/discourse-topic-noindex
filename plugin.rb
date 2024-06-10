@@ -44,7 +44,7 @@ after_initialize do
 
       def show
         super
-        response.headers["X-Robots-Tag"] = "noindex" if @topic_view.topic.noindex
+        response.headers["X-Robots-Tag"] = "noindex" if @topic_view&.topic&.noindex
       end
     end
 
