@@ -21,8 +21,7 @@ acceptance("Topic No-index", function (needs) {
   test("'hide from search engines' button appears", async function (assert) {
     await visit("/t/-/719");
     assert.dom(".d-icon-wrench").exists("it shows the topic wrench button");
-
-    await click(".topic-admin-menu-button button");
+    await click(".topic-admin-menu-trigger");
     assert
       .dom(".topic-admin-menu-content .toggle-noindex")
       .hasText(I18n.t("js.topic.actions.noindex"));
@@ -32,7 +31,7 @@ acceptance("Topic No-index", function (needs) {
     await visit("/t/-/720");
     assert.dom(".d-icon-wrench").exists("it shows the topic wrench button");
 
-    await click(".topic-admin-menu-button button");
+    await click(".topic-admin-menu-trigger");
     assert
       .dom(".topic-admin-menu-content .toggle-noindex")
       .hasText(I18n.t("js.topic.actions.noindex_stop"));
