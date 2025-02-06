@@ -1,8 +1,8 @@
 import { click, visit } from "@ember/test-helpers";
 import { test } from "qunit";
+import { cloneJSON } from "discourse/lib/object";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
-import { cloneJSON } from "discourse-common/lib/object";
-import I18n from "discourse-i18n";
+import { i18n } from "discourse-i18n";
 import topicFixtures from "../fixtures/topic-fixtures";
 
 acceptance("Topic No-index", function (needs) {
@@ -24,7 +24,7 @@ acceptance("Topic No-index", function (needs) {
     await click(".topic-admin-menu-trigger");
     assert
       .dom(".topic-admin-menu-content .toggle-noindex")
-      .hasText(I18n.t("js.topic.actions.noindex"));
+      .hasText(i18n("js.topic.actions.noindex"));
   });
 
   test("'stop hiding from search engines' button appears", async function (assert) {
@@ -34,6 +34,6 @@ acceptance("Topic No-index", function (needs) {
     await click(".topic-admin-menu-trigger");
     assert
       .dom(".topic-admin-menu-content .toggle-noindex")
-      .hasText(I18n.t("js.topic.actions.noindex_stop"));
+      .hasText(i18n("js.topic.actions.noindex_stop"));
   });
 });
