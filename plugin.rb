@@ -38,7 +38,7 @@ after_initialize do
 
           render json: success_json
         rescue ActiveRecord::RecordInvalid
-          render json: failed_json, status: 422
+          render json: failed_json, status: :unprocessable_content
         end
       end
 

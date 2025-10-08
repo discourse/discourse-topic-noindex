@@ -5,7 +5,7 @@ export default {
   name: "discourse-topic-noindex",
 
   initialize() {
-    withPluginApi("0.8.31", (api) => {
+    withPluginApi((api) => {
       api.addTopicAdminMenuButton((topic) => {
         const canManageTopic = api.getCurrentUser()?.canManageTopic;
 
