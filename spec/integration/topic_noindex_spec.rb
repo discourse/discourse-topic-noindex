@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 # tests:
 # 1. with regular user, validate that toggle_no_index returns error
 # 2. with admin user, request /t/-/<topic-id>, validate that noindex is false
