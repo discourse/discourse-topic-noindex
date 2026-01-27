@@ -948,7 +948,6 @@ export default {
         bookmarked: false,
         liked: false,
         tags: [],
-        tags_descriptions: {},
         like_count: 0,
         views: 2,
         category_id: 121,
@@ -994,7 +993,7 @@ export default {
         notification_level: 3,
         bookmarked: false,
         liked: false,
-        tags: ["carruther"],
+        tags: [{ id: 1, name: "carruther", slug: "carruther" }],
         tags_descriptions: {
           carruther: "<a href='http://yahoo.com'>oopsy</a>",
         },
@@ -1043,7 +1042,7 @@ export default {
         notification_level: 3,
         bookmarked: false,
         liked: false,
-        tags: ["fathoms"],
+        tags: [{ id: 2, name: "fathoms", slug: "fathoms" }],
         tags_descriptions: {
           fathoms: "a godlike creature",
         },
@@ -1092,7 +1091,7 @@ export default {
         notification_level: 3,
         bookmarked: false,
         liked: false,
-        tags: ["create-tag"],
+        tags: [{ id: 3, name: "create-tag", slug: "create-tag" }],
         tags_descriptions: {},
         like_count: 0,
         views: 1,
@@ -1142,7 +1141,6 @@ export default {
         bookmarked: false,
         liked: false,
         tags: [],
-        tags_descriptions: {},
         like_count: 0,
         views: 1,
         category_id: 120,
@@ -1162,7 +1160,7 @@ export default {
         ],
       },
     ],
-    tags: ["lkhlhp"],
+    tags: [{ id: 4, name: "lkhlhp", slug: "lkhlhp" }],
     tags_descriptions: {
       lkhlhp:
         '<div>xxul</div> window.alert("hi")poopopa tablell<a href="http://www.yahoo.com">kk</a>',
